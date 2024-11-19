@@ -50,12 +50,13 @@ int main(){
     }
 
     // Set up cuBLAS
-    cublasHandle_t cublasHandler;
+    cublasHandle_t cublasHandler = NULL;
     CHECK_CUBLAS(cublasCreate(&cublasHandler));
 
     // Call cuBLAS API
-    // The matrix A is row-major and the leasing dimenstion is the number of rows
-    CHECK_CUBLAS(cublasSgemv(cublasHandler, CUBLAS_OP_N, numOfRow, numOfCol, &alpha, mtxA_d, numOfRow, vecX_d, 1, &beta, vecY_d, 1));
+    // The matrix A is row-major and the leasing dimenstion is the number of columns.
+    // cuBLAS assumes column-major order, so we need to transpose when it handles Row-major matrics.
+    CHECK_CUBLAS(cublasSgemv(cublasHandler, CUBLAS_OP_T, numOfRow, numOfCol, &alpha, mtxA_d, numOfRow, vecX_d, 1, &beta, vecY_d, 1));
 
     if (debug) {
         // Debug: Print result vector Y in device memory
