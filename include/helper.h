@@ -121,6 +121,30 @@ void print_mtx_clm_d(const T *mtx_d, int numOfRow, int numOfClm){
     free(check_r);
 } // end of print_mtx_h
 
+// Print matrix in row-major order (Host)
+template <typename T>
+void print_mtx_row_h(const T *mtx_h, int numOfRow, int numOfClm) {
+    for (int rwWkr = 0; rwWkr < numOfRow; rwWkr++) {
+        for (int clWkr = 0; clWkr < numOfClm; clWkr++) {
+            // Access element in row-major order
+            printf("%f ", mtx_h[rwWkr * numOfClm + clWkr]);
+        }
+        printf("\n");
+    }
+}
+
+// Print matrix in column-major order (Host)
+template <typename T>
+void print_mtx_clm_h(const T *mtx_h, int numOfRow, int numOfClm) {
+    for (int rwWkr = 0; rwWkr < numOfRow; rwWkr++) {
+        for (int clWkr = 0; clWkr < numOfClm; clWkr++) {
+            // Access element in column-major order
+            printf("%f ", mtx_h[clWkr * numOfRow + rwWkr]);
+        }
+        printf("\n");
+    }
+}
+
 
 
 
