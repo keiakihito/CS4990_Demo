@@ -15,6 +15,8 @@ int main(){
     float* vecY_d = NULL;
     float* result_d = NULL;
 
+    bool debug = true;
+
     // Allocate memory on device
     CHECK(cudaMalloc((void**)&vecX_d, N * sizeof(float)));
     CHECK(cudaMalloc((void**)&vecY_d, N * sizeof(float)));
@@ -23,6 +25,15 @@ int main(){
     // Copy data from host to device
     CHECK(cudaMemcpy(vecX_d, vecX_h, N * sizeof(float), cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(vecY_d, vecY_h, N * sizeof(float), cudaMemcpyHostToDevice));
+
+    if(debug){
+        printf("\nVector X (Device Memory):\n");
+        print_vector_d(vecX_d, N);
+
+        printf("\nVector Y (Device Memory):\n");
+        print_vector_d(vecY_d, N);
+
+    }
 
     // Setup cuBLAS handler
     cublasHandle_t cublasHandler = NULL;
@@ -44,3 +55,24 @@ int main(){
 
     return 0;
 }
+
+/*
+Sample Run
+
+Vector X (Device Memory):
+1.0000000000
+2.0000000000
+3.0000000000
+4.0000000000
+5.0000000000
+
+Vector Y (Device Memory):
+5.0000000000
+4.0000000000
+3.0000000000
+2.0000000000
+1.0000000000
+
+result_h: 35.000000
+
+*/

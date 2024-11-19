@@ -20,8 +20,16 @@ void print_vector(const T *d_val, int size);
 template<typename T>
 void print_mtx_clm_d(const T *mtx_d, int numOfRow, int numOfClm);
 
+//Print matrix column major
+template <typename T>
+void print_mtx_clm_d(const T *mtx_d, int numOfRow, int numOfClm);
 
+// Print matrix in row-major order (Host)
+template <typename T>
+void print_mtx_row_h(const T *mtx_h, int numOfRow, int numOfClm);
 
+template <typename T>
+void print_mtx_clm_h(const T *mtx_h, int numOfRow, int numOfClm);
 
 // // = = = Function signatures = = = = 
 
@@ -33,16 +41,9 @@ double myCPUTimer()
     return ((double)tp.tv_sec + (double)tp.tv_usec/1.0e6);
 }
 
-template<typename T>
-void check_allocation(const T *val_h){
-    if(val_h == NULL){
-        fprintf(stderr, "\n!!Failed to allocate host memory!!\n");
-        exit(EXIT_FAILURE);
-    }
-}
 
 template<typename T>
-void print_vector(const T *d_val, int size) {
+void print_vector_d(const T *d_val, int size) {
     // Allocate memory on the host
     T *check_r = (T *)malloc(sizeof(T) * size);
 
@@ -54,16 +55,19 @@ void print_vector(const T *d_val, int size) {
     // Copy data from device to host
     // cudaError_t err = cudaMemcpy(check_r, d_val, size * sizeof(T), cudaMemcpyDeviceToHost);
     CHECK(cudaMemcpy(check_r, d_val, size * sizeof(T), cudaMemcpyDeviceToHost));
-    // if (err != cudaSuccess) {
-    //     printf("cudaMemcpy failed: %s\n", cudaGetErrorString(err));
-    //     free(check_r);
-    //     return;
-    // }
+
     // Print the values to check them
     for (int i = 0; i < size; i++) {
-            printf("%.10f \n", check_r[i]);
+        // Use the correct format based on the type of T
+        if constexpr (std::is_same<T, float>::value) {
+            printf("%.10f\n", check_r[i]); // For float
+        } else if constexpr (std::is_same<T, int>::value) {
+            printf("%d\n", check_r[i]); // For int
+        } else {
+            printf("Unsupported data type\n");
+            break;
+        }
     }
-    
 
     // Free allocated memory
     free(check_r);

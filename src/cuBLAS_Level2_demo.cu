@@ -43,10 +43,10 @@ int main(){
         print_mtx_row_d(mtxA_d, numOfRow, numOfCol);
 
         printf("\nVector X (Device Memory):\n");
-        print_mtx_clm_d(vecX_d, numOfCol, 1);
+        print_vector_d(vecX_d, numOfRow);
 
         printf("\nVector Y (Device Memory, Before SGEMV):\n");
-        print_mtx_clm_d(vecY_d, numOfRow, 1);
+        print_vector_d(vecY_d, numOfRow);
     }
 
     // Set up cuBLAS
@@ -61,7 +61,7 @@ int main(){
     if (debug) {
         // Debug: Print result vector Y in device memory
         printf("\nVector Y (Device Memory, After SGEMV):\n");
-        print_mtx_clm_d(vecY_d, numOfRow, 1);
+        print_vector_d(vecY_d, numOfRow);
     }
 
     // Copy result from device to host
