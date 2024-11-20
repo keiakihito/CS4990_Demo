@@ -1,3 +1,16 @@
+/*
+Reference page
+
+Download nsight-system
+https://developer.nvidia.com/nsight-systems/get-started
+
+Documentation
+https://docs.nvidia.com/nsight-systems/UserGuide/index.html
+
+Video walk through
+https://www.youtube.com/watch?v=dUDGO66IadU
+*/
+
 #include <iostream>
 #include <cublas_v2.h>
 #include <cuda_runtime.h>
@@ -225,3 +238,18 @@ bool verify(float* cuBLAS_d, float* kernel_d, unsigned int nRows, unsigned int n
     }// end of outer loop
     return true;
 } // end of verify
+
+/*
+Sample Run
+
+Memory transfer from host to device: 18.072998 ms 
+
+cuBLAS: 8.555176 ms 
+
+1_naive: 493.748779 ms 
+
+Memory transfer from device to host: 71.024902 ms 
+
+VERIFY: kernel PASSED👍👍👍
+
+ */

@@ -149,14 +149,4 @@ void print_mtx_clm_h(const T *mtx_h, int numOfRow, int numOfClm) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
 #endif // HELPER_H

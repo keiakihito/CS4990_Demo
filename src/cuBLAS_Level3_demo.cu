@@ -1,3 +1,14 @@
+/*
+Reference 
+
+Documentation 
+https://docs.nvidia.com/cuda/cublas/
+
+Example code
+https://github.com/NVIDIA/CUDALibrarySamples/blob/master/cuBLAS/Level-3/gemm/cublas_gemm_example.cu
+*/
+
+
 #include <iostream>
 #include <cublas_v2.h>
 #include <cuda_runtime.h>
@@ -124,5 +135,4 @@ Matrix C (Host Memory):
 30.000000 84.000000 138.000000 
 24.000000 69.000000 114.000000 
 18.000000 54.000000 90.000000 
-
- */
+*/

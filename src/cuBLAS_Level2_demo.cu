@@ -1,3 +1,14 @@
+/*
+Reference 
+
+Documentation 
+https://docs.nvidia.com/cuda/cublas/
+
+Example code
+https://github.com/NVIDIA/CUDALibrarySamples/blob/master/cuBLAS/Level-2/gemv/cublas_gemv_example.cu
+
+*/
+
 #include <iostream>
 #include <cublas_v2.h>
 #include <cuda_runtime.h>

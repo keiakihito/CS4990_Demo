@@ -1,3 +1,14 @@
+/*
+Refernce 
+
+Documentation
+https://docs.nvidia.com/cuda/cusparse/
+
+Example Code
+https://github.com/NVIDIA/CUDALibrarySamples/blob/master/cuSPARSE/spmv_coo/spmv_coo_example.c
+
+*/
+
 #include <iostream>
 #include <cusparse.h>
 #include <cuda_runtime.h>
@@ -157,6 +168,4 @@ Result Vector vecY_h:
 1.000000 
 13.000000 
 12.000000 
-
-
- */
+*/

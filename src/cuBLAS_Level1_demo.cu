@@ -1,3 +1,14 @@
+/*
+Reference 
+
+Documentation 
+https://docs.nvidia.com/cuda/cublas/
+
+Example code
+https://github.com/NVIDIA/CUDALibrarySamples/blob/master/cuBLAS/Level-1/dot/cublas_dot_example.cu
+
+*/
+
 #include <iostream>
 #include <cublas_v2.h>
 #include <cuda_runtime.h>
@@ -74,5 +85,4 @@ Vector Y (Device Memory):
 1.0000000000
 
 result_h: 35.000000
-
 */

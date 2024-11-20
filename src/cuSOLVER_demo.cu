@@ -1,3 +1,14 @@
+/*
+Reference page
+
+Documentation
+https://docs.nvidia.com/cuda/cusolver/index.html
+
+Example code
+https://github.com/NVIDIA/CUDALibrarySamples/blob/master/cuSOLVER/getrf/cusolver_getrf_example.cu
+
+*/
+
 #include <iostream>
 #include <cusolverDn.h>
 #include <cuda_runtime.h>
@@ -71,3 +82,15 @@ int main() {
     
     return 0;
 }
+
+/*
+Sample Run
+
+mtxA_d before cusolverDnSgetrf
+4.000000 1.000000 
+3.000000 1.000000 
+
+mtxA_d after cusolverDnSgetrf
+4.000000 1.000000 
+0.750000 0.250000 
+*/
