@@ -38,9 +38,8 @@ double myCPUTimer()
 {
     struct timeval tp;
     gettimeofday(&tp, NULL);
-    return ((double)tp.tv_sec + (double)tp.tv_usec/1.0e6);
+    return ((double)tp.tv_sec * 1.0e3 + (double)tp.tv_usec / 1.0e3); // Convert seconds and microseconds to milliseconds
 }
-
 
 template<typename T>
 void print_vector_d(const T *d_val, int size) {
