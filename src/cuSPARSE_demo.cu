@@ -50,14 +50,14 @@ int main(){
 
     bool debug = true;
 
-    // Allocate device memory
+    // (1) Allocate device memory
     CHECK(cudaMalloc((void**)&csrOffsets_d, (numOfRow+1) * sizeof(int)));
     CHECK(cudaMalloc((void**)&columns_d, nnz * sizeof(int)));
     CHECK(cudaMalloc((void**)&values_d, nnz * sizeof(float)));
     CHECK(cudaMalloc((void**)&vecX_d, numOfClm * sizeof(float)));
     CHECK(cudaMalloc((void**)&vecY_d, numOfClm * sizeof(float)));
 
-    // Copy data from host to device
+    // (2) Copy data from host to device
     CHECK(cudaMemcpy(csrOffsets_d, csrOffsets_h, (numOfRow + 1) * sizeof(int), cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(columns_d, columns_h, nnz * sizeof(int), cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(values_d, values_h, nnz * sizeof(float), cudaMemcpyHostToDevice));
@@ -81,23 +81,23 @@ int main(){
         print_vector_d(vecY_d, numOfRow);
     }
 
-    // Create cuSPARSE handler
+    // (3) Create cuSPARSE handler
     cusparseHandle_t cusparseHandler = NULL;
     CHECK_CUSPARSE(cusparseCreate(&cusparseHandler));
 
-    // Create matrix and vector descriptors
+    // (4) Create matrix and vector descriptors
     cusparseSpMatDescr_t mtxA_des = NULL;
     cusparseDnVecDescr_t vecX_des = NULL;
     cusparseDnVecDescr_t vecY_des = NULL;
 
-    // Define sparse matrix A in CSR format
+    // (5) Define sparse matrix A in CSR format
     CHECK_CUSPARSE(cusparseCreateCsr(&mtxA_des, numOfRow, numOfClm, nnz, csrOffsets_d, columns_d, values_d, CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO, CUDA_R_32F));
 
     // Define dense vecotrs x and y
     CHECK_CUSPARSE(cusparseCreateDnVec(&vecX_des, numOfRow, vecX_d, CUDA_R_32F));
     CHECK_CUSPARSE(cusparseCreateDnVec(&vecY_des, numOfRow, vecY_d, CUDA_R_32F));
 
-    // Allocate workspase for SpMV
+    // (6) Calculate workspase for SpMV
     size_t bufferSize = 0;
     void *buffer_d = NULL;
     CHECK_CUSPARSE(cusparseSpMV_bufferSize(cusparseHandler, CUSPARSE_OPERATION_NON_TRANSPOSE, &alpha,mtxA_des, vecX_des, &beta, vecY_des, CUDA_R_32F, CUSPARSE_SPMV_ALG_DEFAULT, &bufferSize));
@@ -107,16 +107,16 @@ int main(){
         printf("\nBuffer size (bytes): %zu\n", bufferSize);
     }
 
-    // Perform SpMV
+    // (7) Perform SpMV
     CHECK_CUSPARSE(cusparseSpMV(cusparseHandler, CUSPARSE_OPERATION_NON_TRANSPOSE, &alpha, mtxA_des, vecX_des, &beta, vecY_des, CUDA_R_32F, CUSPARSE_SPMV_ALG_DEFAULT, buffer_d));
 
-    // Copy refult from device to host
+    // (8) Copy refult from device to host
     CHECK(cudaMemcpy(vecY_h, vecY_d, numOfRow * sizeof(float), cudaMemcpyDeviceToHost));
 
     printf("\nResult Vector vecY_h:\n");
     print_mtx_clm_h(vecY_h, numOfRow, 1);
 
-    // Free memory
+    // (9) Clean up
     CHECK_CUSPARSE(cusparseDestroySpMat(mtxA_des));
     CHECK_CUSPARSE(cusparseDestroyDnVec(vecX_des));
     CHECK_CUSPARSE(cusparseDestroyDnVec(vecY_des));

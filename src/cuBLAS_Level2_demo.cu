@@ -37,12 +37,12 @@ int main(){
 
     bool debug = true;
 
-    // Allocate memory on the device
+    // (1) Allocate memory on the device
     CHECK(cudaMalloc((void**)&mtxA_d, numOfRow * numOfCol * sizeof(float)));
     CHECK(cudaMalloc((void**)&vecX_d, numOfRow * sizeof(float)));
     CHECK(cudaMalloc((void**)&vecY_d, numOfRow * sizeof(float)));
 
-    // Copy data from host to device
+    // (2) Copy data from host to device
     CHECK(cudaMemcpy(mtxA_d, mtxA_h, numOfRow * numOfCol * sizeof(float), cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(vecX_d, vecX_h, numOfRow * sizeof(float), cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(vecY_d, vecY_h, numOfRow * sizeof(float), cudaMemcpyHostToDevice));
@@ -60,11 +60,11 @@ int main(){
         print_vector_d(vecY_d, numOfRow);
     }
 
-    // Set up cuBLAS
+    // (3) Set up cuBLAS handler
     cublasHandle_t cublasHandler = NULL;
     CHECK_CUBLAS(cublasCreate(&cublasHandler));
 
-    // Call cuBLAS API
+    // (4) Call cuBLAS API
     // The matrix A is row-major and the leasing dimenstion is the number of columns.
     // cuBLAS assumes column-major order, so we need to transpose when it handles Row-major matrics.
     CHECK_CUBLAS(cublasSgemv(cublasHandler, CUBLAS_OP_T, numOfRow, numOfCol, &alpha, mtxA_d, numOfRow, vecX_d, 1, &beta, vecY_d, 1));
@@ -75,14 +75,14 @@ int main(){
         print_vector_d(vecY_d, numOfRow);
     }
 
-    // Copy result from device to host
+    // (5) Copy result from device to host
     CHECK(cudaMemcpy(vecY_h, vecY_d, numOfRow * sizeof(float), cudaMemcpyDeviceToHost));
 
     // Check the result
     printf("\nvecY_h:\n");
     print_mtx_clm_h(vecY_h, numOfRow, 1);
 
-    // Free memory
+    // (6) Clean up
     CHECK_CUBLAS(cublasDestroy(cublasHandler));
     CHECK(cudaFree(mtxA_d));
     CHECK(cudaFree(vecX_d));

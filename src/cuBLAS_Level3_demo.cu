@@ -50,12 +50,12 @@ int main(){
     float* mtxB_d = NULL;
     float* mtxC_d = NULL;
 
-    // Allocate memeory on the device
+    // (1) Allocate memeory on the device
     CHECK(cudaMalloc((void**)&mtxA_d, M * K * sizeof(float)));
     CHECK(cudaMalloc((void**)&mtxB_d, K * N * sizeof(float)));
     CHECK(cudaMalloc((void**)&mtxC_d, M * N * sizeof(float)));
 
-    // Copy data from host to device
+    // (2) Copy data from host to device
     CHECK(cudaMemcpy(mtxA_d, mtxA_h, M * K * sizeof(float), cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(mtxB_d, mtxB_h, K * N * sizeof(float), cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(mtxC_d, mtxC_h, M * N * sizeof(float), cudaMemcpyHostToDevice));
@@ -72,11 +72,11 @@ int main(){
         print_mtx_row_d(mtxC_d, M, N);
     }
 
-    // Set up cuBLAS
+    // (3) Set up cuBLAS
     cublasHandle_t cublasHandler = NULL;
     CHECK_CUBLAS(cublasCreate(&cublasHandler));
 
-    // Call cuBLAS API
+    // (4) Call cuBLAS API
     // Since matrices are Row-Major, the leading dimensnion is as follow
     // Matrix A: K, Matrix B: N, Matrix C: K
     // cuBLAS assumes column-major order, so we need to transpose when it handles Row-major matrics
@@ -88,14 +88,14 @@ int main(){
         print_mtx_row_d(mtxC_d, M, N);
     }
 
-    // Copy result from device to host
+    // (5) Copy result from device to host
     CHECK(cudaMemcpy(mtxC_h, mtxC_d, M * N * sizeof(float), cudaMemcpyDeviceToHost));
 
     // Print the result Matrix C in host memory
     printf("\nMatrix C (Host Memory): \n");
     print_mtx_row_h(mtxC_h, M, N);
 
-    // Free device memory
+    // (6) Clean up
     CHECK_CUBLAS(cublasDestroy(cublasHandler));
     CHECK(cudaFree(mtxA_d));
     CHECK(cudaFree(mtxB_d));

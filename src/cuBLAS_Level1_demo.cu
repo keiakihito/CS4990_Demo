@@ -28,12 +28,12 @@ int main(){
 
     bool debug = true;
 
-    // Allocate memory on device
+    // (1) Allocate memory on device
     CHECK(cudaMalloc((void**)&vecX_d, N * sizeof(float)));
     CHECK(cudaMalloc((void**)&vecY_d, N * sizeof(float)));
     CHECK(cudaMalloc((void**)&result_d, sizeof(float)));
 
-    // Copy data from host to device
+    // (2) Copy data from host to device
     CHECK(cudaMemcpy(vecX_d, vecX_h, N * sizeof(float), cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(vecY_d, vecY_h, N * sizeof(float), cudaMemcpyHostToDevice));
 
@@ -46,19 +46,20 @@ int main(){
 
     }
 
-    // Setup cuBLAS handler
+    // (3) Setup cuBLAS handler
     cublasHandle_t cublasHandler = NULL;
     CHECK_CUBLAS(cublasCreate(&cublasHandler));
 
-    // Calling cuBLAS API
+    // (4) Calling cuBLAS API
     CHECK_CUBLAS(cublasSdot(cublasHandler, N, vecX_d, 1, vecY_d, 1, result_d));
 
-    // Copy data from device to host
+    // (5) Copy data from device to host
     CHECK(cudaMemcpy(&result_h, result_d, sizeof(float), cudaMemcpyDeviceToHost));
 
     //Check the result
     printf("\nresult_h: %f",result_h);
-    // Free memeory
+
+    // (6) Clean up
     CHECK_CUBLAS(cublasDestroy(cublasHandler));
     CHECK(cudaFree(vecX_d));
     CHECK(cudaFree(vecY_d));
