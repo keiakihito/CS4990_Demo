@@ -49,6 +49,3 @@ The corresponding presentation slides detailing the CUDA API calls can be access
 This repository was created as part of the **CS4990** course presentation, focusing on demonstrating efficient use of CUDA libraries for numerical computing.
 
 ---
-
-## **Author**
-- **Keita Katsumi**
