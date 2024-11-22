@@ -94,7 +94,7 @@ int main()
 
     // (3) Calling cuBLAS
     startTime = myCPUTimer();
-    nvtxRangePush("Start cublasSgemm");
+    nvtxRangePush("cublasSgemm");
     CHECK_CUBLAS(cublasSgemm(cublasHandler, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, &alpha, mtxA_d, m, mtxB_d, k, &beta, mtxC_cuBLAS_d, m));
     cudaDeviceSynchronize(); // Ensure cuBLAS operation is complete
     nvtxRangePop();
