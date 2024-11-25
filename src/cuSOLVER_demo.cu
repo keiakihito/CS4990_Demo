@@ -28,8 +28,7 @@ int main() {
 
     // (1) Input matrix (Column-major order)
     float mtxA_h[lda * N] = {
-        4.0f, 3.0f, 
-        1.0f, 1.0f
+        4.0f, 3.0f, 1.0f, 1.0f
     };
 
 
